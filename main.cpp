@@ -1,3 +1,4 @@
+#include "log.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -98,8 +99,12 @@ int main () {
     /* The number of work-items in work-group is `num_elements` */
     global_work_size[0] = num_elements;
 
+    Timer t("vecAdd");
+    t._Tic();
     /* execute kernel compute */
     clEnqueueNDRangeKernel (cmd_queue, kernel, 1, NULL, global_work_size, NULL, 0, NULL, NULL);
+    t._Toc();
+    t.profile();
 
     /* copy `buffer_c` to `c` in host */
     clEnqueueReadBuffer (cmd_queue, buffer_c, CL_TRUE, 0, data_size, c, 0, NULL, NULL);
