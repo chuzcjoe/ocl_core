@@ -1,6 +1,7 @@
 #ifndef __OCLWRAPPER_H__
 #define __OCLWRAPPER_H__
 
+#include <assert.h>
 #include <mutex>
 #include <string>
 #include <vector>
@@ -8,6 +9,7 @@
 #include <memory>
 #include <fstream>
 #include <iostream>
+#include <string>
 #include <CL/opencl.h>
 
 
@@ -34,6 +36,7 @@ public:
 
     void createOclRunTime();
     void buildKernel(const std::string& kernel_file, const std::string& kernel_name);
+    void oclFinish();
 };
 
 #endif

@@ -49,6 +49,20 @@ void OclWrapper::buildProgramWithSource(const std::string& kernel_file, const st
     const char* source = src.c_str();
     m_program = clCreateProgramWithSource(m_context, 1, &source, NULL, NULL);
     clBuildProgram(m_program, num_devices, m_devices.data(), NULL, NULL, NULL);
+
+    // Check if kernel is defined
+    size_t size;
+    clGetProgramInfo(m_program, CL_PROGRAM_BINARY_SIZES, sizeof(size_t), &size, nullptr);
+    char* binary = new char[size];
+    clGetProgramInfo(m_program, CL_PROGRAM_BINARIES, size, &binary, nullptr);
+
+    std::string binaryString(binary, size);
+
+    if (binaryString.find(kernel_name) == std::string::npos) {
+        std::cerr << "\033[1;31mkernel is undefined\033[0m" << std::endl;
+        assert(false);
+    }
+
     m_kernel = clCreateKernel(m_program, kernel_name.c_str(), NULL);
 }
 
@@ -64,4 +78,11 @@ void OclWrapper::createOclRunTime() {
 
 void OclWrapper::buildKernel(const std::string& kernel_file, const std::string& kernel_name) {
     this->buildProgramWithSource(kernel_file, kernel_name);
+}
+
+void OclWrapper::oclFinish() {
+    if (!m_queue)
+        return;
+    
+    clFinish(m_queue);
 }

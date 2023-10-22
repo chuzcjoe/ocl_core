@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "OclWrapper.h"
-
-/* OpenCL Header file */
 #include <CL/opencl.h>
 
 int main() {
@@ -33,7 +31,7 @@ int main() {
 
     OclWrapper* ocl = new OclWrapper();
     ocl->createOclRunTime();
-    ocl->buildKernel("./kernels/vecAdd.cl", "vecss_add");
+    ocl->buildKernel("./kernels/vecAdd.cl", "vec_add1");
 
     cl_mem buffer_a, buffer_b, buffer_c;
     buffer_a = clCreateBuffer (ocl->m_context, CL_MEM_READ_ONLY, data_size, NULL, NULL);
@@ -44,18 +42,27 @@ int main() {
     clEnqueueWriteBuffer (ocl->m_queue, buffer_a, CL_FALSE, 0, data_size, a, 0, NULL, NULL);
     clEnqueueWriteBuffer (ocl->m_queue, buffer_b, CL_FALSE, 0, data_size, b, 0, NULL, NULL);
 
-    clSetKernelArg (ocl->m_kernel, 0, sizeof (cl_mem), &buffer_a);
-    clSetKernelArg (ocl->m_kernel, 1, sizeof (cl_mem), &buffer_b);
-    clSetKernelArg (ocl->m_kernel, 2, sizeof (cl_mem), &buffer_c);
+    int idx = 0;
+    clSetKernelArg (ocl->m_kernel, idx++, sizeof (cl_mem), &buffer_a);
+    clSetKernelArg (ocl->m_kernel, idx++, sizeof (cl_mem), &buffer_b);
+    clSetKernelArg (ocl->m_kernel, idx++, sizeof (cl_mem), &buffer_c);
 
     size_t gs[1] = {num_elements};
 
     Timer t("vecAdd");
     t._Tic();
     ocl->runKernel(gs, nullptr, 1);
-    clFinish(ocl->m_queue);
+    ocl->oclFinish();
     t._Toc();
     t.profile();
+
+    int* tmp = (int*) malloc(data_size);
+    clEnqueueReadBuffer(ocl->m_queue, buffer_c, CL_TRUE, 0, data_size, tmp, 0, NULL, NULL);
+
+    for (int i = 0; i < num_elements; i++) {
+        if (tmp[i] != c[i])
+            std::cout << "error at index: " << i << ", tmp: " << tmp[i] << ", c: " << c[i] << std::endl; 
+    }
 
     delete ocl;
     free (a);
