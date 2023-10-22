@@ -26,8 +26,6 @@ cl_device_id OclWrapper::getDevice() {
     if (m_devices.empty()) {
         std::cerr << "No devices found!" << std::endl;
         exit(1);
-    } else {
-        std::cout << "number of devices: " << m_devices.size() << std::endl;
     }
 
     return m_devices[0];
@@ -68,6 +66,46 @@ void OclWrapper::buildProgramWithSource(const std::string& kernel_file, const st
 
 void OclWrapper::runKernel(const size_t gs[], const size_t ls[], int dim) {
     clEnqueueNDRangeKernel(m_queue, m_kernel, dim, NULL, gs, ls, 0, NULL, NULL);
+}
+
+void OclWrapper::deviceInfo() {
+    auto device = m_devices[0];
+
+    char name[1024];
+    clGetDeviceInfo(device, CL_DEVICE_NAME, sizeof(name), name, NULL);
+
+    char vendor[1024];
+    clGetDeviceInfo(device, CL_DEVICE_VENDOR, sizeof(vendor), vendor, NULL);
+
+    char version[1024];
+    clGetDeviceInfo(device, CL_DEVICE_VERSION, sizeof(version), version, NULL);
+
+    size_t workItems[3];
+    clGetDeviceInfo(device, CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(workItems), workItems, NULL);
+
+    size_t workGroups;
+    clGetDeviceInfo(device, CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(workGroups), &workGroups, NULL);
+
+    cl_uint computeUnits;
+    clGetDeviceInfo(device, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(computeUnits), &computeUnits, NULL);
+
+    cl_ulong globalMemory;
+    clGetDeviceInfo(device, CL_DEVICE_GLOBAL_MEM_SIZE, sizeof(globalMemory), &globalMemory, NULL);
+
+    cl_ulong localMemory;
+    clGetDeviceInfo(device, CL_DEVICE_LOCAL_MEM_SIZE, sizeof(localMemory), &localMemory, NULL);
+
+
+    std::cout << "\tOpenCL Device Info:"
+    << "\n\tName: " << name
+    << "\n\tVendor: " << vendor
+    << "\n\tVersion: " << version
+    << "\n\tMax size of work-items: (" << workItems[0] << "," << workItems[1] << "," << workItems[2] << ")"
+    << "\n\tMax size of work-groups: " << workGroups
+    << "\n\tNumber of compute units: " << computeUnits
+    << "\n\tGlobal memory size (bytes): " << globalMemory
+    << "\n\tLocal memory size (bytes): " << localMemory
+    << std::endl;
 }
 
 void OclWrapper::createOclRunTime() {

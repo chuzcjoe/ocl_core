@@ -35,6 +35,7 @@ public:
     void runKernel(const size_t gs[], const size_t ls[], int dim);
 
     void createOclRunTime();
+    void deviceInfo();
     void buildKernel(const std::string& kernel_file, const std::string& kernel_name);
     void oclFinish();
 };

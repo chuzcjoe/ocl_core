@@ -6,6 +6,7 @@ project(oclcore)
 set(CMAKE_CXX_STANDARD 11)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/CImg)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/utils)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/oclWrapper)
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)

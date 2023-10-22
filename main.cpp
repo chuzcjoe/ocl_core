@@ -11,7 +11,7 @@ int main() {
     int *c = NULL;
 
     /* element numbers of each array */
-    const int num_elements = 1000;
+    const int num_elements = 10000;
 
     /* array size */
     size_t data_size = sizeof (int) * num_elements;
@@ -31,6 +31,7 @@ int main() {
 
     OclWrapper* ocl = new OclWrapper();
     ocl->createOclRunTime();
+    ocl->deviceInfo();
     ocl->buildKernel("./kernels/vecAdd.cl", "vec_add1");
 
     cl_mem buffer_a, buffer_b, buffer_c;
