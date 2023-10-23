@@ -11,7 +11,7 @@ include_directories(${root_dir}/include)
 include_directories(${root_dir}/include/CImg)
 include_directories(${root_dir}/utils)
 include_directories(${root_dir}/src/oclWrapper)
-link_directories(${root_dir}/lib)
+link_directories(${root_dir}/lib/Qualcomm)
 
 file(GLOB SRC_LIST ${root_dir}/utils/*.cpp
                     ${root_dir}/src/oclWrapper/*.cpp)

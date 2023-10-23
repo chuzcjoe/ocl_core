@@ -11,7 +11,7 @@ int main() {
     int *c = NULL;
 
     /* element numbers of each array */
-    const int num_elements = 10000;
+    const int num_elements = 500;
 
     /* array size */
     size_t data_size = sizeof (int) * num_elements;

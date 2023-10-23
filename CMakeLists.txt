@@ -9,7 +9,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/CImg)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/utils)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/oclWrapper)
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/Qualcomm)
 
 file(GLOB SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/utils/*.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/src/oclWrapper/*.cpp)
