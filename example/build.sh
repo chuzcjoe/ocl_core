@@ -1,5 +1,5 @@
 phone_dir="/data/local/tmp/ocl"
-test_module="test_opencv"
+test_module="test_gaussianFilter"
 
 rm -rf build
 mkdir build

@@ -25,7 +25,8 @@ target_link_libraries(ocl PUBLIC ${OPENCV_LINK_LIBS})
 add_definitions("-DCL_TARGET_OPENCL_VERSION=200")
 
 set(TEST_FILES test_vecAdd
-                test_opencv)
+                test_opencv
+                test_gaussianFilter)
 
 foreach(program ${TEST_FILES})
     add_executable(${program} ${program}.cpp)
